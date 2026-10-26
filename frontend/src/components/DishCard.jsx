@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { saveDish } from '../api/dishesApi';
 
-export default function DishCard({ dish, onUpdate }) {
+export default function DishCard({ dish, latest, onUpdate }) {
   // dish = last saved values from the server. draft = local edits only.
   const [draft, setDraft] = useState({
     dishName: dish.dishName,
@@ -14,6 +14,17 @@ export default function DishCard({ dish, onUpdate }) {
 
   const dirty =
     draft.dishName !== dish.dishName || draft.isPublished !== dish.isPublished;
+  // Newer saved data from polling (someone else changed it)
+  const hasNewer = latest && latest.version > dish.version;
+
+  // No unsaved draft: quietly apply the newer data.
+  // Unsaved draft: do nothing here, the indicator below is shown instead.
+  useEffect(() => {
+    if (hasNewer && !dirty && !saving) {
+      onUpdate(latest);
+      setDraft({ dishName: latest.dishName, isPublished: latest.isPublished });
+    }
+  }, [hasNewer, dirty, saving, latest, onUpdate]);
 
   const resetTo = (d) => setDraft({ dishName: d.dishName, isPublished: d.isPublished });
 
@@ -83,8 +94,14 @@ export default function DishCard({ dish, onUpdate }) {
         />
         Published
       </label>
-
       {dirty && <span className="badge">Unsaved changes</span>}
+
+      {hasNewer && dirty && !conflict && (
+        <p className="error">
+          Newer saved data available (version {latest.version}). Your draft is kept.
+          Save to see a conflict, or Discard to load it.
+        </p>
+      )}
       {error && <p className="error">{error}</p>}
 
       {conflict && (
