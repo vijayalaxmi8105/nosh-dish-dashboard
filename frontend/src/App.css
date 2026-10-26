@@ -1,0 +1,15 @@
+.container { max-width: 1100px; margin: 0 auto; padding: 16px; font-family: system-ui, sans-serif; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.card { border: 1px solid #ccc; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.card-dirty { border-color: #e69500; background: #fff8e8; }
+.card img, .img-fallback { width: 100%; height: 160px; object-fit: cover; border-radius: 6px; }
+.img-fallback { display: flex; align-items: center; justify-content: center; background: #eee; color: #666; }
+.meta { margin: 0; font-size: 13px; color: #555; }
+.row { display: flex; gap: 8px; align-items: center; }
+label { display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
+label.row { flex-direction: row; }
+input[type="text"], label input:not([type]) { padding: 6px; }
+.badge { background: #e69500; color: #fff; padding: 2px 8px; border-radius: 10px; font-size: 12px; align-self: flex-start; }
+.error { background: #fdecea; color: #b3261e; padding: 8px; border-radius: 6px; }
+button { padding: 6px 12px; cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: 0.5; }
